@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-4">
+            <h2>Lista de tarefas |
+                <small>criar</small>
+            </h2>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+
+        <form action="{{ path('lists.store') }}" method="POST">
+            <div class="row">
+                <div class="offset-10 col-2">
+                    <button class="btn btn-success float-right">
+                        <span>Salvar lista</span>
+                    </button>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label>Nome</label>
+                                    <input type="text" class="form-control" name="name" required="required">
+                                </div>
+
+                                <div class="col-8">
+                                    <label>Descrição</label>
+                                    <input type="text" class="form-control" name="description">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="offset-10 col-2">
+                    <button class="btn btn-success float-right">
+                        <span>Salvar lista</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+{% endblock %}

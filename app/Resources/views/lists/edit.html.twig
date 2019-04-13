@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    <script>
+        $(function () {
+            $("#newItem").on("click", newItem)
+        })
+
+        let i = 100;
+
+        let newItem = () => {
+            let fields = '<tr class="d-flex">'+
+                            '<td class="col-1">'+
+                                '<input type="checkbox" name="items['+ i +'][concluded]" value="1">'+
+                            '</td>'+
+                            '<td class="col-9">'+
+                                '<input type="text" class="form-control" name="items['+ i++ +'][name]">'+
+                            '</td>'+
+                         '</tr>'
+
+            $("#itemsTable").append(fields)
+        }
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-4">
+            <h2>Lista de tarefas |
+                <small>editar</small>
+            </h2>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+
+        <form action="{{ path('lists.update', {id: list.id}) }}" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <div class="row">
+                <div class="offset-10 col-2">
+                    <button class="btn btn-success float-right">
+                        <span>Salvar lista</span>
+                    </button>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-4">
+                                    <label>Nome</label>
+                                    <input type="text" class="form-control" disabled value="{{ list.name }}">
+                                </div>
+
+                                <div class="col-8">
+                                    <label>Descrição</label>
+                                    <input type="text" class="form-control" name="description" value="{{ list.description }}">
+                                </div>
+                            </div>
+
+                            <br><br>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <h5>Items</h5>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <table class="table">
+                                        <thead>
+                                            <tr class="d-flex">
+                                                <th class="col-1">Status</th>
+                                                <th class="col-9">Nome</th>
+                                                <th class="col-2 text-center">
+                                                    <button type="button" class="btn btn-success btn-sm" id="newItem">
+                                                        Novo Item
+                                                    </button>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="itemsTable">
+                                            {% for item in list.items %}
+                                                <tr class="d-flex">
+                                                    <td class="col-1">
+                                                        <input type="checkbox" name="items_existents[{{ i }}][concluded]" {{ (item.concluded == true) ? 'checked' : '' }} value="1">
+                                                        <input type="hidden" name="items_existents[{{ i }}][id]" value="{{ item.id }}">
+                                                    </td>
+                                                    <td class="col-9">{{ item.name }}</td>
+                                                </tr>
+                                                {% set i = i + 1 %}
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="offset-10 col-2">
+                    <button class="btn btn-success float-right">
+                        <span>Salvar lista</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+{% endblock %}

@@ -3,7 +3,58 @@
 {% block body %}
     <div class="row">
         <div class="col-4">
-            asdas
+            <h2>Lista de tarefas | <small>listar</small></h2>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="offset-10 col-2">
+            <a href="{{ path('lists.create') }}">
+                <button type="button" class="btn btn-success float-right">
+                    <span>Nova lista</span>
+                </button>
+            </a>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Descrição</th>
+                        <th>Status</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for list in lists %}
+                        <tr>
+                            <td>{{ list.name }}</td>
+                            <td>{{ list.description }}</td>
+                            <td>{{ list.getStatus() }}</td>
+                            <td>
+                                <a href="{{ path('lists.edit', {id: list.id}) }}">
+                                    <button type="button" class="btn btn-success btn-sm">
+                                        Editar
+                                    </button>
+                                </a>
+                                <form action="{{ url('lists.destroy', {id: list.id}) }}" style="display: none" id="listDelete{{ list.id }}" method="POST">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                </form>
+                                <button class="btn btn-danger btn-sm" onclick="$('#listDelete{{ list.id }}').submit()">
+                                    Excluir
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
