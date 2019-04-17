@@ -28,6 +28,13 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            {% if errors is defined and errors | length > 0 %}
+                                <ul class="alert alert-danger">
+                                    {% for error in errors %}
+                                        <li>{{ error.message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                             <div class="row">
                                 <div class="col-4">
                                     <label>Nome</label>

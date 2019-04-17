@@ -43,6 +43,12 @@ class ListController extends Controller
         $listItems->setName($request->get('name'));
         $listItems->setDescription($request->get('description'));
 
+        $errors = $this->get('validator')->validate($listItems);
+
+        if (count($errors) > 0) {
+            return $this->render('lists/create.html.twig', ['errors' => $errors]);
+        }
+
         $entityManager = $this->getDoctrine()->getManager();
 
         $entityManager->persist($listItems);
