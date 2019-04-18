@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login</title>
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="{{  path('login') }}" method="POST">
+                            <div class="row">
+                                <div class="col-6 offset-3">
+                                    <label for="_username">Usuário</label>
+                                    <input type="text" id="_username" name="_username" value="{{  last_username }}" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+                                <div class="col-6 offset-3">
+                                    <label for="_password">Senha</label>
+                                    <input type="password" id="_password" name="_password" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <br>
+
+                            {% if error %}
+                                <div class="row">
+                                    <div class="col-6 offset-3">
+                                        <div class="alert alert-danger">
+                                            <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="row">
+                                <div class="col-6 offset-3">
+                                    <button class="btn btn-success float-right">Logar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
