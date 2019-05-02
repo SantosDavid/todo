@@ -38,7 +38,7 @@ class Item
 
     /**
      * @ORM\ManyToOne(targetEntity="ListItems", inversedBy="items")
-     * @ORM\JoinColumn(name="list_items_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="list_items_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $listItems;
 
