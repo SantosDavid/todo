@@ -32,6 +32,10 @@ security:
                 check_path: login
                 default_target_path: lists.index
 
+            logout:
+                path: /logout
+                target: /
 
     access_control:
         - {path: '^/lists', roles: ROLE_USER}
+        - {path: '^/$', roles: ROLE_USER}
