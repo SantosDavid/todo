@@ -1,16 +1,33 @@
 imports:
-    - { resource: config_dev.yml }
+  - { resource: config_dev.yml }
 
 framework:
-    test: ~
-    session:
-        storage_id: session.storage.mock_file
-    profiler:
-        collect: false
+  test: ~
+  session:
+    storage_id: session.storage.mock_file
+  profiler:
+    collect: false
 
 web_profiler:
-    toolbar: false
-    intercept_redirects: false
+  toolbar: false
+  intercept_redirects: false
 
 swiftmailer:
-    disable_delivery: true
+  disable_delivery: true
+
+security:
+  encoders:
+    Symfony\Component\Security\Core\User\User: plaintext
+  providers:
+    in_memory:
+      memory:
+        users:
+          test:
+            password: 123456
+            roles: 'ROLE_USER'
+
+  firewalls:
+    # replace 'main' by the name of your own firewall
+    main:
+      http_basic: ~
+      provider: in_memory
