@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -11,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="list_items")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ListItemsRepository")
+ * @UniqueEntity(fields="name", message="Sorry, this name of list is already in use.")
  */
 class ListItems
 {
@@ -26,10 +28,9 @@ class ListItems
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=20)
+     * @ORM\Column(name="name", type="string", length=20, unique=true)
      * @Assert\NotBlank
      * @Assert\Length(min=3)
-     * @Assert\Length(max=3)
      */
     private $name;
 
@@ -37,7 +38,6 @@ class ListItems
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
-     * @Assert\Blank
      * @Assert\Length(min=10)
      */
     private $description;

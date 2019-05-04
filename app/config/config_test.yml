@@ -31,3 +31,6 @@ security:
     main:
       http_basic: ~
       provider: in_memory
+
+parameters:
+  database_name: testing
