@@ -9,19 +9,24 @@ class SecutiryControllerTest extends WebTestCase
 {
     use ResetDatabase;
 
-    private $client;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        $this->client = static::createClient([]);
-    }
-
     public function testAccessWithoutIsLogged()
     {
-        $this->client->request('GET', '/lists/');
+        $client = static::createClient([]);
 
-        $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
+        $client->request('GET', '/lists/');
+
+        $this->assertEquals(302, $client->getResponse()->getStatusCode());
+    }
+
+    public function testSuccess()
+    {
+        $client = static::createClient([], [
+            'PHP_AUTH_USER' => 'test',
+            'PHP_AUTH_PW'   => '123456',
+        ]);
+
+        $client->request('GET', '/lists/');
+
+        $this->assertEquals(200, $client->getResponse()->getStatusCode());
     }
 }
