@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class MeControllerController extends Controller
 {
     /**
-     * @Route("edit", name="edit")
+     * @Route("/edit", name="edit")
      *
      * @param UserInterface $user
      * @param Request $request

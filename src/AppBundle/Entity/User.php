@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -61,6 +62,15 @@ class User implements UserInterface, Serializable
      */
     private $isActive = true;
 
+    /**
+     * @ORM\OneToMany(targetEntity="ListItems", mappedBy="listItems")
+     */
+    private $listItems;
+
+    public function __construct()
+    {
+        $this->listItems = new ArrayCollection();
+    }
 
     /**
      * Get id

@@ -47,6 +47,12 @@ class ListItems
      */
     private $items;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="listItems")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     */
+    private $user;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -151,5 +157,21 @@ class ListItems
         }
 
         return 'Concluida';
+    }
+
+    /**
+     * @return int
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param int $user
+     */
+    public function setUser($user)
+    {
+        $this->user = $user;
     }
 }
