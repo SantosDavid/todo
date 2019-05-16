@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-4">
+            <h2>Meu cadastro |
+                <small>editar</small>
+            </h2>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="container">
+
+        <form action="{{ path('me.edit', {id: user.id}) }}" method="POST">
+            <div class="row">
+                <div class="offset-10 col-2">
+                    <button class="btn btn-success float-right">
+                        <span>Atualizar</span>
+                    </button>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            {{ form_start(editForm) }}
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form_row(editForm.username, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form_row(editForm.email, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form_row(editForm.password.first, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <div class="row">
+                                <div class="col-12">
+                                    {{ form_row(editForm.password.second, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+                            {{ form_end(editForm) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="offset-10 col-2">
+                    <button class="btn btn-success float-right">
+                        <span>Atualizar</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+{% endblock %}
