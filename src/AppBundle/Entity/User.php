@@ -63,7 +63,7 @@ class User implements UserInterface, Serializable
     private $isActive = true;
 
     /**
-     * @ORM\OneToMany(targetEntity="ListItems", mappedBy="listItems")
+     * @ORM\OneToMany(targetEntity="ListItems", mappedBy="user")
      */
     private $listItems;
 
@@ -177,6 +177,23 @@ class User implements UserInterface, Serializable
     {
         return $this->isActive;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getListItems()
+    {
+        return $this->listItems;
+    }
+
+    /**
+     * @param mixed $listItems
+     */
+    public function setListItems($listItems)
+    {
+        $this->listItems = $listItems;
+    }
+
 
     public function getSalt()
     {

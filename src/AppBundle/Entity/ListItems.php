@@ -159,17 +159,11 @@ class ListItems
         return 'Concluida';
     }
 
-    /**
-     * @return int
-     */
     public function getUser()
     {
         return $this->user;
     }
 
-    /**
-     * @param int $user
-     */
     public function setUser($user)
     {
         $this->user = $user;

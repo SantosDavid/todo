@@ -3,10 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ListItems;
+use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("/lists", name="lists.")
@@ -16,11 +18,9 @@ class ListController extends Controller
     /**
      * @Route("/", name="index")
      */
-    public function indexAction()
+    public function indexAction(UserInterface $user)
     {
-        $listItems = $this->getDoctrine()
-            ->getRepository(ListItems::class)
-            ->findAll();
+        $listItems = $user->getListItems();
 
         return $this->render('lists/index.html.twig', ['lists' => $listItems]);
     }
@@ -36,11 +36,12 @@ class ListController extends Controller
     /**
      * @Route("store", name="store", methods="POST")
      */
-    public function storeAction(Request $request)
+    public function storeAction(Request $request, UserInterface $user)
     {
         $listItems = new ListItems();
 
         $listItems->setName($request->get('name'));
+        $listItems->setUser($user);
         $listItems->setDescription($request->get('description'));
 
         $errors = $this->get('validator')->validate($listItems);
