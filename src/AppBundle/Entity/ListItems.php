@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use AppBundle\Annotation\UserAware;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -13,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="list_items")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\ListItemsRepository")
  * @UniqueEntity(fields="name", message="Sorry, this name of list is already in use.")
+ * @UserAware(userFieldName="user_id")
  */
 class ListItems
 {

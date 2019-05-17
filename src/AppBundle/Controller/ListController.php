@@ -3,7 +3,6 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ListItems;
-use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -18,9 +17,11 @@ class ListController extends Controller
     /**
      * @Route("/", name="index")
      */
-    public function indexAction(UserInterface $user)
+    public function indexAction()
     {
-        $listItems = $user->getListItems();
+        $listItems = $this->getDoctrine()
+                ->getRepository(ListItems::class)
+                ->findAll();
 
         return $this->render('lists/index.html.twig', ['lists' => $listItems]);
     }
