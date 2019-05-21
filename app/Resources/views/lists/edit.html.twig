@@ -35,9 +35,7 @@
     <br>
 
     <div class="container">
-
-        <form action="{{ path('lists.update', {id: list.id}) }}" method="POST">
-            <input type="hidden" name="_method" value="PUT">
+        {{ form_start(form) }}
             <div class="row">
                 <div class="offset-10 col-2">
                     <button class="btn btn-success float-right">
@@ -52,15 +50,14 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+
                             <div class="row">
                                 <div class="col-4">
-                                    <label>Nome</label>
-                                    <input type="text" class="form-control" disabled value="{{ list.name }}">
+                                    {{ form_row(form.name, {attr: {'class': 'form-control', 'readonly': true}}) }}
                                 </div>
 
                                 <div class="col-8">
-                                    <label>Descrição</label>
-                                    <input type="text" class="form-control" name="description" value="{{ list.description }}">
+                                    {{ form_row(form.description, {attr: {'class': 'form-control', 'readonly': true}}) }}
                                 </div>
                             </div>
 
@@ -115,7 +112,6 @@
                     </button>
                 </div>
             </div>
-        </form>
-
+        {{ form_end(form) }}
     </div>
 {% endblock %}

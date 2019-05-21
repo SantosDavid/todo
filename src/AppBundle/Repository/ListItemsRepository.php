@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Item;
+use AppBundle\Entity\ListItems;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityRepository;
 use Exception;
@@ -14,6 +15,15 @@ use Exception;
  */
 class ListItemsRepository extends EntityRepository
 {
+    public function save(ListItems $listItems)
+    {
+        $entityManager = $this->getEntityManager();
+
+        $entityManager->persist($listItems);
+
+        $entityManager->flush();
+    }
+
     public function update($id, Request $request)
     {
         $list = $this->findOneById($id);

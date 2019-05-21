@@ -3,8 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ListItems;
+use AppBundle\Form\ListItemsType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -28,55 +30,60 @@ class ListController extends Controller
 
     /**
      * @Route("/create", name="create")
+     *
+     * @param Request $request
+     * @param UserInterface $user
+     *
+     * @return Response
      */
-    public function createAction()
-    {
-        return $this->render('lists/create.html.twig');
-    }
-
-    /**
-     * @Route("store", name="store", methods="POST")
-     */
-    public function storeAction(Request $request, UserInterface $user)
+    public function createAction(Request $request, UserInterface $user)
     {
         $listItems = new ListItems();
 
-        $listItems->setName($request->get('name'));
-        $listItems->setUser($user);
-        $listItems->setDescription($request->get('description'));
+        $form = $this->createForm(ListItemsType::class, $listItems);
+        $form->handleRequest($request);
 
-        $errors = $this->get('validator')->validate($listItems);
-
-        if (count($errors) > 0) {
-            return $this->render('lists/create.html.twig', ['errors' => $errors]);
+        if (!($form->isSubmitted() && $form->isValid())) {
+            return $this->render('lists/create.html.twig', [
+                'form' => $form->createView()
+            ]);
         }
 
-        $entityManager = $this->getDoctrine()->getManager();
+        $listItems->setUser($user);
 
-        $entityManager->persist($listItems);
-
-        $entityManager->flush();
+        $this->getDoctrine()
+            ->getRepository(ListItems::class)
+            ->save($listItems);
 
         return $this->redirectToRoute('lists.index');
     }
 
     /**
-     * @Route("/{id}", name="edit", methods="GET")
+     * @Route("/{id}", name="edit")
+     *
+     * @param int $id
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function editAction($id)
+    public function editAction(int $id, Request $request)
     {
         $list = $this->getDoctrine()
             ->getRepository(ListItems::class)
             ->findOneById($id);
 
-        return $this->render('lists/edit.html.twig', ['list' => $list, 'i' => 0]);
-    }
+        $form = $this->createForm(ListItemsType::class, $list);
 
-    /**
-     * @Route("/{id}/update", name="update", methods="PUT")
-     */
-    public function updateAction($id, Request $request)
-    {
+        $form->handleRequest($request);
+
+        if (!($form->isSubmitted() && $form->isValid())) {
+            return $this->render('lists/edit.html.twig', [
+                'list' => $list,
+                'i' => 0,
+                'form' => $form->createView()
+            ]);
+        }
+
         try {
             $this->getDoctrine()
                 ->getRepository(ListItems::class)
@@ -90,8 +97,13 @@ class ListController extends Controller
 
     /**
      * @Route("{id}", name="destroy", methods="DELETE")
+     *
+     * @param int id
+     * @param Request $request
+     *
+     * @return Response
      */
-    public function destroyAction($id, Request $request)
+    public function destroyAction(int $id, Request $request)
     {
         try {
             $this->getDoctrine()

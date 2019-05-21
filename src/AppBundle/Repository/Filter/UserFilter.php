@@ -31,7 +31,6 @@ class UserFilter extends SQLFilter
         $userId = $this->getParameter('id');
 
 
-
         return "{$targetTableAlias}.{$fieldName}={$userId}";
     }
 

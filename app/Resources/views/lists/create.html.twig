@@ -13,7 +13,7 @@
 
     <div class="container">
 
-        <form action="{{ path('lists.store') }}" method="POST">
+        <form  method="POST">
             <div class="row">
                 <div class="offset-10 col-2">
                     <button class="btn btn-success float-right">
@@ -28,24 +28,17 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            {% if errors is defined and errors | length > 0 %}
-                                <ul class="alert alert-danger">
-                                    {% for error in errors %}
-                                        <li>{{ error.message }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
+                            {{ form_start(form) }}
                             <div class="row">
                                 <div class="col-4">
-                                    <label>Nome</label>
-                                    <input type="text" class="form-control" name="name" required="required">
+                                    {{ form_row(form.name, {'attr':{'class': 'form-control'}}) }}
                                 </div>
 
                                 <div class="col-8">
-                                    <label>Descrição</label>
-                                    <input type="text" class="form-control" name="description">
+                                    {{ form_row(form.description, {'attr':{'class': 'form-control'}}) }}
                                 </div>
                             </div>
+                            {{ form_end(form) }}
                         </div>
                     </div>
                 </div>
