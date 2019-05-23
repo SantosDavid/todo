@@ -42,3 +42,18 @@ services:
             - '@annotation_reader'
         tags:
             - {name: kernel.event_listener, event: kernel.request}
+
+    AppBundle\Service\General\FileUploaderService:
+        arguments:
+            $targetDirectory: '%photo_directory%'
+
+    AppBundle\EventListener\UserPhotoUpdateListener:
+        tags:
+            - {name: doctrine.event_listener, event: prePersist}
+            - {name: doctrine.event_listener, event: preUpdate}
+            - {name: doctrine.event_listener, event: postLoad}
+
+    AppBundle\EventListener\UserEncodePasswordListener:
+        tags:
+            - {name: doctrine.event_listener, event: prePersist}
+            - {name: doctrine.event_listener, event: preUpdate}

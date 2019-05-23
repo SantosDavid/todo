@@ -20,8 +20,11 @@
                             {{ form_start(form) }}
 
                             <div class="row">
-                                <div class="col-12">
+                                <div class="col-8">
                                     {{ form_row(form.username, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                                <div class="col-4">
+                                    {{ form_row(form.photo) }}
                                 </div>
                             </div>
 

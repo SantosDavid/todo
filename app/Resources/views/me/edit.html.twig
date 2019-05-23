@@ -1,5 +1,13 @@
 {% extends 'base.html.twig' %}
 
+{% block javascripts %}
+    <script>
+        $(function () {
+            $("form").attr("enctype", "multipart/form-data");
+        })
+    </script>
+{% endblock %}
+
 {% block body %}
     <div class="row">
         <div class="col-4">
@@ -14,6 +22,7 @@
     <div class="container">
 
         <form action="{{ path('me.edit', {id: user.id}) }}" method="POST">
+
             <div class="row">
                 <div class="offset-10 col-2">
                     <button class="btn btn-success float-right">
@@ -28,10 +37,21 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
+                            {% if (user.photoLink) %}
+                                <div class="row">
+                                    <div class="col-6 offset-5">
+                                            <img src="{{ asset('uploads/users/' ~ user.getPhotoLink) }}" width="150px" alt="user"class="img-thumbnail rounded-circle">
+                                    </div>
+                                </div>
+                            {% endif %}
                             {{ form_start(editForm) }}
                             <div class="row">
-                                <div class="col-12">
-                                    {{ form_row(editForm.username, {'attr': {'class': 'form-control'}}) }}
+                                <div class="col-8">
+                                    <label for="username">Username</label>
+                                    <input type="text" id="username" disabled value="{{ user.username }}" class="form-control">
+                                </div>
+                                <div class="col-4 mt-4">
+                                    {{ form_row(editForm.photo) }}
                                 </div>
                             </div>
 
@@ -47,7 +67,7 @@
 
                             <div class="row">
                                 <div class="col-12">
-                                    {{ form_row(editForm.password.first, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_row(editForm.password.first, {'attr': {'class': 'form-control'}, 'required': false}) }}
                                 </div>
                             </div>
 
@@ -55,7 +75,7 @@
 
                             <div class="row">
                                 <div class="col-12">
-                                    {{ form_row(editForm.password.second, {'attr': {'class': 'form-control'}}) }}
+                                    {{ form_row(editForm.password.second, {'attr': {'class': 'form-control'}, 'required': false}) }}
                                 </div>
                             </div>
                             {{ form_end(editForm) }}

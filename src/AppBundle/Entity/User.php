@@ -56,6 +56,12 @@ class User implements UserInterface, Serializable
     private $email;
 
     /**
+     * @ORM\Column(name="photo", type="string", nullable=true)
+     * @Assert\File(mimeTypes={"image/jpeg", "image/png"})
+     */
+    private $photo;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="isActive", type="boolean")
@@ -115,7 +121,9 @@ class User implements UserInterface, Serializable
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        if ($password !== null) {
+            $this->password = $password;
+        }
 
         return $this;
     }
@@ -152,6 +160,37 @@ class User implements UserInterface, Serializable
     public function getEmail()
     {
         return $this->email;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPhoto()
+    {
+        return $this->photo;
+    }
+
+    public function getPhotoLink()
+    {
+        $photo = $this->photo;
+
+        if (!is_string($photo)) {
+            $photo = $photo->getFileName();
+        }
+
+        return $photo;
+    }
+
+    /**
+     * @param mixed $photo
+     *
+     * @return mixed
+     */
+    public function setPhoto($photo)
+    {
+        $this->photo = $photo;
+
+        return $this;
     }
 
     /**
@@ -231,4 +270,3 @@ class User implements UserInterface, Serializable
             ) = unserialize($serialized, ['allowed_classes' => false]);
     }
 }
-
