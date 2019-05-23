@@ -16,11 +16,10 @@ class RegistrationController extends Controller
      * @Route("/register", name="register")
      *
      * @param Request $request
-     * @param UserPasswordEncoderInterface $passwordEncoder
      *
      * @return Response
      */
-    public function registerAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function registerAction(Request $request)
     {
         $user = new User();
 
@@ -29,9 +28,6 @@ class RegistrationController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password =  $passwordEncoder->encodePassword($user, $user->getPassword());
-            $user->setPassword($password);
-
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
