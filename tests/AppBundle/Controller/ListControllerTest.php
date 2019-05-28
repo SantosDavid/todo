@@ -32,7 +32,7 @@ class PostControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('save')->form();
 
-        $this->client->submit($form, ['name' => 'New list', 'description' => 'list create to test']);
+        $this->client->submit($form, ['appbundle_listitems[name]' => 'New list', 'appbundle_listitems[description]' => 'list create to test']);
 
         $this->assertEquals(302, $this->client->getResponse()->getStatusCode());
     }
@@ -43,8 +43,8 @@ class PostControllerTest extends WebTestCase
 
         $form = $crawler->selectButton('save')->form();
 
-        $this->client->submit($form, ['name' => 'New list', 'description' => 'list create to test']);
-        $this->client->submit($form, ['name' => 'New list', 'description' => 'list create to test']);
+        $this->client->submit($form, ['appbundle_listitems[name]' => 'New list', 'appbundle_listitems[description]' => 'list create to test']);
+        $this->client->submit($form, ['appbundle_listitems[name]' => 'New list', 'appbundle_listitems[description]' => 'list create to test']);
 
         $this->assertEquals(200, $this->client->getResponse()->getStatusCode());
     }

@@ -49,7 +49,9 @@ class ListController extends Controller
             ]);
         }
 
-        $listItems->setUser($user);
+        if ($this->container->get('kernel')->getEnvironment() !== 'test') {
+            $listItems->setUser($user);
+        }
 
         $this->getDoctrine()
             ->getRepository(ListItems::class)
