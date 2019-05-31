@@ -45,7 +45,7 @@ class ListItems
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity="Item", mappedBy="listItems")
+     * @ORM\OneToMany(targetEntity="Item", mappedBy="listItems", cascade={"persist"})
      */
     private $items;
 
@@ -169,5 +169,19 @@ class ListItems
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    public function addItem(Item $item)
+    {
+        $this->items->add($item);
+
+        $item->setListItems($this);
+
+        $this->items->add($item);
+    }
+
+    public function removeItem(Item $item)
+    {
+        $this->items->remove($item);
     }
 }

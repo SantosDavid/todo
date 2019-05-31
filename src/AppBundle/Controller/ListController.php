@@ -3,8 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\ListItems;
+use AppBundle\Form\ItemType;
 use AppBundle\Form\ListItemsType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -63,33 +65,31 @@ class ListController extends Controller
     /**
      * @Route("/{id}", name="edit")
      *
-     * @param int $id
+     * @param ListItems $list
      * @param Request $request
      *
      * @return Response
      */
-    public function editAction(int $id, Request $request)
+    public function editAction(ListItems $list, Request $request)
     {
-        $list = $this->getDoctrine()
-            ->getRepository(ListItems::class)
-            ->findOneById($id);
-
         $form = $this->createForm(ListItemsType::class, $list);
+
+        $form->add('items', CollectionType::class, [
+            'entry_type' => ItemType::class,
+            'allow_add' => true,
+            'by_reference' => false,
+        ]);
 
         $form->handleRequest($request);
 
         if (!($form->isSubmitted() && $form->isValid())) {
             return $this->render('lists/edit.html.twig', [
-                'list' => $list,
-                'i' => 0,
                 'form' => $form->createView()
             ]);
         }
 
         try {
-            $this->getDoctrine()
-                ->getRepository(ListItems::class)
-                ->update($id, $request);
+            $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('lists.index');
         } catch (Exception $e) {
