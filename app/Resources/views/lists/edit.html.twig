@@ -1,24 +1,60 @@
 {% extends 'base.html.twig' %}
 
+{% form_theme form _self %}
+
+{% block _appbundle_listitems_items_entry_widget %}
+    <td class="col-1">{{ form_widget(form.concluded) }}</td>
+    <td class="col-9">{{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}</td>
+{% endblock %}
+
 {% block javascripts %}
     <script>
-        $(function () {
-            $("#newItem").on("click", newItem)
-        })
+        var $collectionHolder;
 
-        let i = 100;
+        // setup an "add a tag" link
+        var $addTagButton = $('<button type="button" class="add_tag_link btn btn-success btn-sm">Add item</button>');
+        var $newLinkLi = $('<li></li>').append($addTagButton);
 
-        let newItem = () => {
-            let fields = '<tr class="d-flex">'+
-                            '<td class="col-1">'+
-                                '<input type="checkbox" name="items['+ i +'][concluded]" value="1">'+
-                            '</td>'+
-                            '<td class="col-9">'+
-                                '<input type="text" class="form-control" name="items['+ i++ +'][name]">'+
-                            '</td>'+
-                         '</tr>'
+        jQuery(document).ready(function() {
+            // Get the ul that holds the collection of tags
+            $collectionHolder = $('ul.items');
 
-            $("#itemsTable").append(fields)
+            // add the "add a tag" anchor and li to the tags ul
+            $collectionHolder.append($newLinkLi);
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $("tbody#itemsTable").find(':input').length);
+
+            $addTagButton.on('click', function(e) {
+                // add a new tag form (see next code block)
+                addTagForm($collectionHolder);
+            });
+        });
+
+        function addTagForm($collectionHolder) {
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            var newForm = prototype;
+            // You need this only if you didn't set 'label' => false in your tags field in TaskType
+            // Replace '__name__label__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            // newForm = newForm.replace(/__name__label__/g, index);
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            newForm = newForm.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<tr class="d-flex"></tr>').append(newForm);
+            $("tbody").append($newFormLi);
         }
     </script>
 {% endblock %}
@@ -77,22 +113,21 @@
                                                 <th class="col-1">Status</th>
                                                 <th class="col-9">Nome</th>
                                                 <th class="col-2 text-center">
-                                                    <button type="button" class="btn btn-success btn-sm" id="newItem">
-                                                        Novo Item
-                                                    </button>
+                                                    <ul class="items" data-prototype="{{ form_widget(form.items.vars.prototype)|e('html_attr') }}" style="list-style-type: none;">
+                                                    </ul>
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody id="itemsTable">
-                                            {% for item in list.items %}
+                                            {% for item in form.items %}
                                                 <tr class="d-flex">
                                                     <td class="col-1">
-                                                        <input type="checkbox" name="items_existents[{{ i }}][concluded]" {{ (item.concluded == true) ? 'checked' : '' }} value="1">
-                                                        <input type="hidden" name="items_existents[{{ i }}][id]" value="{{ item.id }}">
+                                                        {{ form_widget(item.concluded) }}
                                                     </td>
-                                                    <td class="col-9">{{ item.name }}</td>
+                                                    <td class="col-9">
+                                                        {{ form_widget(item.name, {attr: {'class': 'form-control'}}) }}
+                                                    </td>
                                                 </tr>
-                                                {% set i = i + 1 %}
                                             {% endfor %}
                                         </tbody>
                                     </table>
