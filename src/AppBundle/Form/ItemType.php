@@ -16,7 +16,7 @@ class ItemType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('concluded', CheckboxType::class);
+            ->add('concluded', CheckboxType::class, ['required' => false]);
     }/**
      * {@inheritdoc}
      */

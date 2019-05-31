@@ -2,20 +2,17 @@
 
 {% form_theme form _self %}
 
-{% block _appbundle_listitems_widget %}
-    <tr>
-        <td>{{ form_widget(form.task) }}</td>
-        <td>{{ form_widget(form.dueDate) }}</td>
-    </tr>
+{% block _appbundle_listitems_items_entry_widget %}
+    <td class="col-1">{{ form_widget(form.concluded) }}</td>
+    <td class="col-9">{{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}</td>
 {% endblock %}
-
 
 {% block javascripts %}
     <script>
         var $collectionHolder;
 
         // setup an "add a tag" link
-        var $addTagButton = $('<button type="button" class="add_tag_link">Add a tag</button>');
+        var $addTagButton = $('<button type="button" class="add_tag_link btn btn-success btn-sm">Add item</button>');
         var $newLinkLi = $('<li></li>').append($addTagButton);
 
         jQuery(document).ready(function() {
@@ -27,15 +24,15 @@
 
             // count the current form inputs we have (e.g. 2), use that as the new
             // index when inserting a new item (e.g. 2)
-            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            $collectionHolder.data('index', $("tbody#itemsTable").find(':input').length);
 
             $addTagButton.on('click', function(e) {
                 // add a new tag form (see next code block)
-                addTagForm($collectionHolder, $newLinkLi);
+                addTagForm($collectionHolder);
             });
         });
 
-        function addTagForm($collectionHolder, $newLinkLi) {
+        function addTagForm($collectionHolder) {
             // Get the data-prototype explained earlier
             var prototype = $collectionHolder.data('prototype');
 
@@ -56,8 +53,8 @@
             $collectionHolder.data('index', index + 1);
 
             // Display the form in the page in an li, before the "Add a tag" link li
-            var $newFormLi = $('<li></li>').append(newForm);
-            $newLinkLi.before($newFormLi);
+            var $newFormLi = $('<tr class="d-flex"></tr>').append(newForm);
+            $("tbody").append($newFormLi);
         }
     </script>
 {% endblock %}
@@ -116,9 +113,8 @@
                                                 <th class="col-1">Status</th>
                                                 <th class="col-9">Nome</th>
                                                 <th class="col-2 text-center">
-                                                    <button type="button" class="btn btn-success btn-sm" id="newItem">
-                                                        Novo Item
-                                                    </button>
+                                                    <ul class="items" data-prototype="{{ form_widget(form.items.vars.prototype)|e('html_attr') }}" style="list-style-type: none;">
+                                                    </ul>
                                                 </th>
                                             </tr>
                                         </thead>
@@ -133,8 +129,6 @@
                                                     </td>
                                                 </tr>
                                             {% endfor %}
-                                            <ul class="items" data-prototype="{{ form_widget(form.items.vars.prototype)|e('html_attr') }}">
-                                            </ul>
                                         </tbody>
                                     </table>
                                 </div>
