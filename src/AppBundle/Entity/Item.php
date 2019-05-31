@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Item
@@ -23,17 +24,18 @@ class Item
 
     /**
      * @var string
-     *
+     * @Assert\NotBlank
+     * @Assert\Length(min="3")
      * @ORM\Column(name="name", type="string", length=100, unique=true)
      */
     private $name;
 
     /**
      * @var bool
-     *
+     * @Assert\Type("boolean")
      * @ORM\Column(name="concluded", type="boolean")
      */
-    private $concluded = '0';
+    private $concluded = false;
 
 
     /**
