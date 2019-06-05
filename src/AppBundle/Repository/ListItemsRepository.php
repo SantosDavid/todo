@@ -13,6 +13,15 @@ use Exception;
  */
 class ListItemsRepository extends EntityRepository
 {
+    public function getAll()
+    {
+        $em = $this->getEntityManager();
+
+        $em->getFilters()->disable('user_filter');
+
+        return $this->findAll();
+    }
+
     public function save(ListItems $listItems)
     {
         $entityManager = $this->getEntityManager();
