@@ -16,15 +16,10 @@ class LogListener implements EventSubscriberInterface
      * @var LogRepository
      */
     private $logRepository;
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
 
-    public function __construct(LogRepository $logRepository, RequestStack $requestStack)
+    public function __construct(LogRepository $logRepository)
     {
         $this->logRepository = $logRepository;
-        $this->requestStack = $requestStack;
     }
 
     public function onKernelController(FilterControllerEvent $event)
@@ -39,7 +34,7 @@ class LogListener implements EventSubscriberInterface
             return;
         }
 
-        $request = $this->requestStack->getCurrentRequest();
+        $request = $event->getRequest();
 
         $log = new Log();
 
