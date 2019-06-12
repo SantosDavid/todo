@@ -169,6 +169,10 @@ class User implements UserInterface, Serializable
      */
     public function getPhoto()
     {
+        if (is_string($this->photo)) {
+            return null;
+        }
+        
         return $this->photo;
     }
 
