@@ -3,6 +3,7 @@
 namespace AppBundle\Repository;
 
 use AppBundle\Entity\Log;
+use AppBundle\Repository\Common\Persist;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -14,17 +15,10 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class LogRepository extends ServiceEntityRepository
 {
+    use Persist;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Log::class);
-    }
-
-    public function persist(Log $log)
-    {
-        $em = $this->getEntityManager();
-
-        $em->persist($log);
-
-        $em->flush();
     }
 }

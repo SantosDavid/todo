@@ -1,10 +1,13 @@
 <?php
 
-
 namespace AppBundle\Repository\Common;
 
-
-class Persist
+trait Persist
 {
-
+    public function persist($class)
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($class);
+        $entityManager->flush();
+    }
 }

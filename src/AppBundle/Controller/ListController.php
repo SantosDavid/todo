@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\ListItems;
 use AppBundle\Form\ItemType;
 use AppBundle\Form\ListItemsType;
+use AppBundle\Repository\ListItemsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,13 +20,21 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class ListController extends Controller
 {
     /**
+     * @var ListItemsRepository
+     */
+    private $repository;
+
+    public function __construct(ListItemsRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
+    /**
      * @Route("/", name="index")
      */
     public function indexAction()
     {
-        $listItems = $this->getDoctrine()
-                ->getRepository(ListItems::class)
-                ->findAll();
+        $listItems = $this->repository->findAll();
 
         return $this->render('lists/index.html.twig', ['lists' => $listItems]);
     }
@@ -55,9 +64,7 @@ class ListController extends Controller
             $listItems->setUser($user);
         }
 
-        $this->getDoctrine()
-            ->getRepository(ListItems::class)
-            ->save($listItems);
+        $this->repository->persist($listItems);
 
         return $this->redirectToRoute('lists.index');
     }
@@ -108,9 +115,7 @@ class ListController extends Controller
     public function destroyAction(int $id, Request $request)
     {
         try {
-            $this->getDoctrine()
-                ->getRepository(ListItems::class)
-                ->destroy($id);
+            $this->repository->destroy($id);
 
             return $this->redirectToRoute('lists.index');
         } catch (Exception $e) {

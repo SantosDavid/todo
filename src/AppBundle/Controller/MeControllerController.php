@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\User;
 use AppBundle\Form\UserType;
+use AppBundle\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,11 +16,20 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class MeControllerController extends Controller
 {
     /**
+     * @var UserRepository
+     */
+    private $userRepository;
+
+
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
+    /**
      * @Route("/edit", name="edit")
-     *
      * @param UserInterface $user
      * @param Request $request
-     *
      * @return Response
      */
     public function editAction(UserInterface $user, Request $request)
@@ -32,9 +41,7 @@ class MeControllerController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()
-                ->getRepository(User::class)
-                ->update();
+            $this->userRepository->update();
         }
 
         return $this->render('me/edit.html.twig', [
