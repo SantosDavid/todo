@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use AppBundle\Events\UserSubscribedEvent;
 use AppBundle\Form\UserType;
+use AppBundle\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,10 +18,15 @@ class RegistrationController extends Controller
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    public function __construct(EventDispatcherInterface $eventDispatcher, UserRepository $userRepository)
     {
         $this->eventDispatcher = $eventDispatcher;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -40,9 +46,7 @@ class RegistrationController extends Controller
             $event = new UserSubscribedEvent($user);
             $this->eventDispatcher->dispatch(UserSubscribedEvent::NAME, $event);
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $this->userRepository->persist($user);
 
             return $this->redirectToRoute('login');
         }
